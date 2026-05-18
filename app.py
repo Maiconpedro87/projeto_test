@@ -1,5 +1,10 @@
+import streamlit as st
 import pandas as pd
 
-# df é o seu DataFrame com os dados
-df.to_csv("dataset_tratado.csv", index=False)
+st.title("Leitura do Banco de Dados")
 
+url = "https://raw.githubusercontent.com/Maiconpedro87/projeto_test/refs/heads/main/dataset_tratado.csv"
+
+df = pd.read_csv(url)
+
+st.dataframe(df)

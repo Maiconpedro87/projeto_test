@@ -11,38 +11,29 @@ st.dataframe(df)
 
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
+import plotly.express as px
 
 st.title("Dashboard do Banco de Dados")
 
-# URL do CSV no GitHub
 url = "https://raw.githubusercontent.com/Maiconpedro87/projeto_test/main/dataset_tratado.csv"
-
-# Lendo o CSV
 df = pd.read_csv(url)
 
 st.subheader("Prévia dos dados")
 st.dataframe(df)
 
 st.markdown("---")
-st.header("📊 Gráficos Automáticos")
+st.header("📊 Gráficos Interativos")
 
-# 1. Histograma de todas as colunas numéricas
-st.subheader("Distribuição das variáveis numéricas")
+# Exemplo: gráfico de dispersão
 num_cols = df.select_dtypes(include=['int64', 'float64']).columns
+if len(num_cols) >= 2:
+    fig = px.scatter(df, x=num_cols[0], y=num_cols[1], title=f"{num_cols[0]} vs {num_cols[1]}")
+    st.plotly_chart(fig)
 
-for col in num_cols:
-    fig, ax = plt.subplots()
-    sns.histplot(df[col], kde=True, ax=ax)
-    ax.set_title(f"Distribuição de {col}")
-    st.pyplot(fig)
+# Exemplo: histograma
+fig = px.histogram(df, x=num_cols[0], nbins=20, title=f"Distribuição de {num_cols[0]}")
+st.plotly_chart(fig)
 
-# 2. Correlação entre variáveis
-st.subheader("Mapa de Correlação")
-fig, ax = plt.subplots(figsize=(10, 6))
-sns.heatmap(df[num_cols].corr(), annot=True, cmap="Blues", ax=ax)
-st.pyplot(fig)
 
 # 3. Gráfico de linhas (se tiver datas ou tempo)
 if "data" in df.columns:
